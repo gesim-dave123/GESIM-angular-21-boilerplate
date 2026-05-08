@@ -85,7 +85,7 @@ export class AccountService {
 
   create(params: any) {
     return this.http.post(baseUrl, params);
-}
+  }
   update(id: string, params: any) {
     return this.http.put(`${baseUrl}/${id}`, params).pipe(
       map((account: any) => {
