@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first, finalize } from 'rxjs/operators';
+import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
 
@@ -14,6 +14,7 @@ export class ForgotPasswordComponent implements OnInit {
     private formBuilder: FormBuilder,
     private accountService: AccountService,
     private alertService: AlertService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -26,6 +27,7 @@ export class ForgotPasswordComponent implements OnInit {
   get f() {
     return this.form.controls;
   }
+
   onSubmit() {
     this.submitted = true;
 
@@ -41,11 +43,17 @@ export class ForgotPasswordComponent implements OnInit {
     this.accountService
       .forgotPassword(this.f['email'].value)
       .pipe(first())
-      .pipe(finalize(() => (this.loading = false)))
       .subscribe({
-        next: () =>
-          this.alertService.success('Please check your email for password reset instructions'),
-        error: (error) => this.alertService.error(error),
+        next: () => {
+          this.loading = false;
+          this.cdr.markForCheck();
+          this.alertService.success('Please check your email for password reset instructions');
+        },
+        error: (error) => {
+          this.loading = false;
+          this.cdr.markForCheck();
+          this.alertService.error(error);
+        },
       });
   }
 }
