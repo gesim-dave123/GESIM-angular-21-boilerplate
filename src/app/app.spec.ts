@@ -1,23 +1,45 @@
 import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of } from 'rxjs';
 
-describe('App', () => {
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [App],
-    }).compileComponents();
-  });
+import { AppModule } from './app.module';
+import { AppComponent } from './app.component';
+import { AccountService, AlertService } from './_services';
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(App);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
-  });
+describe('AppComponent', () => {
+    let accountServiceMock: any;
+    let alertServiceMock: any;
 
-  it('should render title', async () => {
-    const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, angular-21-boilerplate');
-  });
+    beforeEach(async () => {
+        accountServiceMock = {
+            account: of(null),
+            logout: vi.fn(),
+            refreshToken: vi.fn().mockReturnValue(of(null))
+        };
+
+        alertServiceMock = {
+            onAlert: vi.fn().mockReturnValue(of({})),
+            clear: vi.fn()
+        };
+
+        await TestBed.configureTestingModule({
+            imports: [
+                AppModule,
+                RouterTestingModule,
+                HttpClientTestingModule
+            ],
+            providers: [
+                { provide: AccountService, useValue: accountServiceMock },
+                { provide: AlertService, useValue: alertServiceMock }
+            ]
+        }).compileComponents();
+    });
+
+    it('should create the app', () => {
+        const fixture = TestBed.createComponent(AppComponent);
+        fixture.detectChanges();
+        const app = fixture.componentInstance;
+        expect(app).toBeTruthy();
+    });
 });
