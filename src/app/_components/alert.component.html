@@ -1,6 +1,15 @@
 <div *ngIf="alerts.length" class="container">
-    <div *ngFor="let alert of alerts" class="{{cssClasses(alert)}}">
-        <a class="btn-close" (click)="removeAlert(alert)"></a>
+  <div class="alert-stack">
+    <div *ngFor="let alert of alerts" class="{{ cssClasses(alert) }}">
+      <div class="alert-content">
         <span [innerHTML]="alert.message"></span>
+      </div>
+      <button
+        type="button"
+        class="btn-close alert-close"
+        aria-label="Close"
+        (click)="removeAlert(alert)"
+      ></button>
     </div>
+  </div>
 </div>
