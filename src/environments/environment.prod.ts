@@ -1,4 +1,4 @@
 export const environment = {
-    production: true,
-    apiUrl: 'http://localhost:4000/api'
+  production: true,
+  apiUrl: 'https://node-mysql-api-ylo3.onrender.com/api',
 };
