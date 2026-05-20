@@ -93,7 +93,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       if (!account) return unauthorized();
 
       const newRefreshToken = generateRefreshToken();
-      account.refreshTokens = (account.refreshTokens || []).filter((x) => x !== token);
+      account.refreshTokens = (account.refreshTokens || []).filter((x: any) => x !== token);
       account.refreshTokens.push(newRefreshToken);
       localStorage.setItem(accountsKey, JSON.stringify(accounts));
 
@@ -110,7 +110,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       const account = accounts.find((x) => x.refreshTokens?.includes(token));
       if (!account) return error('Invalid token');
 
-      account.refreshTokens = account.refreshTokens?.filter((x) => x !== token);
+      account.refreshTokens = account.refreshTokens?.filter((x: any) => x !== token);
       localStorage.setItem(accountsKey, JSON.stringify(accounts));
 
       return ok();
@@ -127,7 +127,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       account.role = accounts.length === 0 ? Role.Admin : Role.User;
       account.isVerified = false;
       account.verificationToken = Math.random().toString(36).substring(2, 15);
-      account.dateCreated = new Date().toISOString();
+      account.created = new Date().toISOString();
       account.refreshTokens = [];
 
       accounts.push(account);
@@ -235,7 +235,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       }
 
       account.id = newAccountId();
-      account.dateCreated = new Date().toISOString();
+      account.created = new Date().toISOString();
       account.isVerified = true;
       account.refreshTokens = [];
 
@@ -292,8 +292,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     }
 
     function basicDetails(account: Account) {
-      const { id, title, firstName, lastName, email, role, dateCreated, isVerified } = account;
-      return { id, title, firstName, lastName, email, role, dateCreated, isVerified };
+      const { id, title, firstName, lastName, email, role, created, isVerified } = account;
+      return { id, title, firstName, lastName, email, role, created, isVerified };
     }
 
     function idFromUrl() {

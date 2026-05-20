@@ -8,11 +8,11 @@ export class Account {
     email?: string;
     role?: Role;
     jwtToken?: string;
-    password?: string;
     isVerified?: boolean;
+    created?: string;
+    password?: string;
+    refreshTokens?: any[];
     verificationToken?: string;
     resetToken?: string;
     resetTokenExpires?: string;
-    refreshTokens?: string[];
-    dateCreated?: string;
 }
